@@ -1,12 +1,25 @@
 package com.varun.android.listview.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.varun.android.listview.R;
+import com.varun.android.listview.adapter.ReminderListAdapter;
+import com.varun.android.listview.model.Movie;
+import com.varun.android.listview.model.Reminder;
+
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ThisDayFragment extends Fragment {
@@ -18,11 +31,16 @@ public class ThisDayFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private RecyclerView reminderListView;
+    private RecyclerView.Adapter reminderListAdapter;
+    private RecyclerView.LayoutManager reminderListLayoutManager;
+    private List<Reminder> reminderList =  new ArrayList<>();;
 
     /*private OnFragmentInteractionListener mListener;*/
 
     public ThisDayFragment() {
         // Required empty public constructor
+
     }
 
     /**
@@ -50,13 +68,59 @@ public class ThisDayFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_thisday_tab, container, false);
+    }
+
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        /*reminderListView = (RecyclerView) view.findViewById(R.id.fg_thisday_lv_reminders);
+        reminderListAdapter = new ReminderListAdapter(reminderList);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(view.getContext());
+        reminderListView.setLayoutManager(mLayoutManager);
+        reminderListView.setItemAnimator(new DefaultItemAnimator());
+        reminderListView.setAdapter(reminderListAdapter);
+
+        Reminder reminder = new Reminder("Fix plumbing issue", "Once", "Scheduled");
+        reminderList.add(reminder);
+
+        reminderListAdapter.notifyDataSetChanged();
+*/
+
+    }
+
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment) {
+            mFragmentList.add(fragment);
+        }
     }
 
    /* // TODO: Rename method, update argument and hook method into UI event

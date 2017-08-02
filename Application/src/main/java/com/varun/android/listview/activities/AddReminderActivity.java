@@ -37,7 +37,7 @@ public class AddReminderActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_detailed_reminder);
+        setContentView(R.layout.add_detailed_reminder_backup);
         ButterKnife.inject(this);
 
         _signupButton.setOnClickListener(new View.OnClickListener() {

@@ -18,6 +18,7 @@ import com.varun.android.listview.R;
 import com.varun.android.listview.adapter.CustomListAdapter;
 import com.varun.android.listview.app.AppController;
 import com.varun.android.listview.model.Movie;
+import com.varun.android.listview.model.Movie_Backup;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,14 +34,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity_Backup extends AppCompatActivity {
+public class MainActivity_Backup /*extends AppCompatActivity*/ {/*
     // Log tag
     private static final String TAG = MainActivity_Backup.class.getSimpleName();
     private static final int ADD_REMINDER = 0;
     // Movies json url
     private static final String url = "https://api.androidhive.info/json/movies.json";
     private ProgressDialog pDialog;
-    private List<Movie> movieList = new ArrayList<Movie>();
+    private List<Movie_Backup> movieList = new ArrayList<Movie_Backup>();
     private ListView listView;
     private CustomListAdapter adapter;
     Button btnClosePopup;
@@ -50,11 +51,11 @@ public class MainActivity_Backup extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_backup_2);
 
 
 
-       /* boolean isPaidVersion = false;
+       *//* boolean isPaidVersion = false;
 
         listView = (ListView) findViewById(R.id.list);
         adapter = new CustomListAdapter(this, movieList);
@@ -88,7 +89,7 @@ public class MainActivity_Backup extends AppCompatActivity {
                 startActivityForResult(intent,ADD_REMINDER);
             }
         });
-        hidePDialog();*/
+        hidePDialog();*//*
     }
 
     @Override
@@ -166,7 +167,7 @@ public class MainActivity_Backup extends AppCompatActivity {
             try {
 
                 JSONObject obj = jsonArray.getJSONObject(i);
-                Movie movie = new Movie();
+                Movie_Backup movie = new Movie_Backup();
                 movie.setTitle(obj.getString("title"));
                 movie.setThumbnailUrl(obj.getString("image"));
                 movie.setRating(((Number) obj.get("rating"))
@@ -208,7 +209,7 @@ public class MainActivity_Backup extends AppCompatActivity {
                             try {
 
                                 JSONObject obj = response.getJSONObject(i);
-                                Movie movie = new Movie();
+                                Movie_Backup movie = new Movie_Backup();
                                 movie.setTitle(obj.getString("title"));
                                 movie.setThumbnailUrl(obj.getString("image"));
                                 movie.setRating(((Number) obj.get("rating"))
@@ -248,7 +249,7 @@ public class MainActivity_Backup extends AppCompatActivity {
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(movieReq);
         VolleyLog.d(TAG, "Error: " + movieReq);
-    }
+    }*/
 }
 
 /*        JsonObjectRequest jsObjRequest = new JsonObjectRequest
@@ -283,7 +284,7 @@ public class MainActivity_Backup extends AppCompatActivity {
                     // We need to get the instance of the LayoutInflater
                     LayoutInflater inflater = (LayoutInflater) MainActivity.this
                             .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    View layout = inflater.inflate(R.layout.add_reminder_layout_popup,
+                    View layout = inflater.inflate(R.layout.add_reminder_layout_popup_backup,
                             (ViewGroup) findViewById(R.id.reminder_layout));
                     pwindo = new PopupWindow(layout, 300, 370, true);
                     pwindo.showAtLocation(layout, Gravity.CENTER, 0, 0);
