@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:ns1="http://schemas.android.com/tools">
+    <string-array name="recurring_types">
+        <item>Once</item>
+        <item>Monthly</item>
+        <item>Yearly</item>
+        <item>Fortnightly</item>
+        <item>Daily</item>
+    </string-array>
+    <string-array name="reminder_group">
+        <item>Personal</item>
+        <item>Official</item>
+    </string-array>
     <attr format="reference" name="constraintSet"/>
     <attr format="reference" name="drawerArrowStyle"/>
     <attr format="dimension" name="height"/>
@@ -120,7 +131,7 @@
     <color name="cardview_light_background">#FFFFFFFF</color>
     <color name="cardview_shadow_end_color">#03000000</color>
     <color name="cardview_shadow_start_color">#37000000</color>
-    <color name="colorAccent">#c8e8ff</color>
+    <color name="colorAccent">#e7f2f1</color>
     <color name="colorPrimary">#125688</color>
     <color name="colorPrimaryDark">#125688</color>
     <color name="color_accent_pink">#ff4081</color>
@@ -668,7 +679,7 @@
     <dimen name="design_tab_text_size_2line">12sp</dimen>
     <item format="float" name="disabled_alpha_material_dark" type="dimen">0.30</item>
     <item format="float" name="disabled_alpha_material_light" type="dimen">0.26</item>
-    <dimen name="fab_margin">0dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
     <dimen name="genre">13dip</dimen>
     <item format="float" name="highlight_alpha_material_colored" type="dimen">0.26</item>
     <item format="float" name="highlight_alpha_material_dark" type="dimen">0.20</item>
@@ -718,6 +729,7 @@
     <item name="action_menu_presenter" type="id"/>
     <item name="home" type="id"/>
     <item name="item_touch_helper_previous_elevation" type="id"/>
+    <item name="masked" type="id"/>
     <item name="progress_circular" type="id"/>
     <item name="progress_horizontal" type="id"/>
     <item name="split_action_bar" type="id"/>
@@ -727,6 +739,7 @@
     <item name="transition_scene_layoutid_cache" type="id"/>
     <item name="up" type="id"/>
     <item name="view_offset_helper" type="id"/>
+    <item name="visible" type="id"/>
     <integer name="abc_config_activityDefaultDur">220</integer>
     <integer name="abc_config_activityShortDur">150</integer>
     <integer name="app_bar_elevation_anim_duration">150</integer>

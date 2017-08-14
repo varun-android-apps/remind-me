@@ -1,136 +1,189 @@
 package com.varun.android.listview.activities;
 
-import com.varun.android.listview.R;
-import android.support.v7.app.AppCompatActivity;
-import android.app.ProgressDialog;
+
+import java.util.Calendar;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+
+import android.media.Image;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.TimePickerDialog;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.text.format.DateFormat;
 import android.view.View;
-import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.ImageButton;
+import android.widget.Spinner;
+import android.widget.TimePicker;
+import android.widget.ToggleButton;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-
-
-/**
- * Created by VarunSasidharan_Nair on 28/07/2017.
- */
+import com.varun.android.listview.R;
+import com.varun.android.listview.app.AppController;
+import com.varun.android.listview.data.AppDatabase;
+import com.varun.android.listview.model.Reminder;
 
 public class AddReminderActivity extends AppCompatActivity {
-
-    private static final String TAG = "SignupActivity";
-
-    @InjectView(R.id.input_name)
-    EditText _nameText;
-    @InjectView(R.id.input_email)
-    EditText _emailText;
-    @InjectView(R.id.input_password)
-    EditText _passwordText;
-    @InjectView(R.id.btn_signup)
-    Button _signupButton;
-    @InjectView(R.id.link_login)
-    TextView _loginLink;
+    static EditText DateEdit;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppThemeBlue);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_detailed_reminder_backup);
-        ButterKnife.inject(this);
+        setContentView(R.layout.activity_add_reminder_table_layout);
 
-        _signupButton.setOnClickListener(new View.OnClickListener() {
+        initToolbar();
+
+        DateEdit = (EditText) findViewById(R.id.fg_reminder_et_select_date);
+        TextInputLayout calendarInputLayout = (TextInputLayout)  findViewById(R.id.fg_reminder_til_select_date);
+        /*ImageButton fg_reminder_img_btn_select_date = (ImageButton) findViewById(R.id.fg_reminder_img_btn_select_date);*/
+        DateEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signup();
+                /*showTruitonTimePickerDialog(v);*/
+                showTruitonDatePickerDialog(v);
             }
         });
 
-        _loginLink.setOnClickListener(new View.OnClickListener() {
+        final Spinner recurringInput = (Spinner) findViewById(R.id.fg_reminder_spn_recurring_type);
+        final Spinner categoryInput = (Spinner) findViewById(R.id.fg_reminder_spn_category);
+        final EditText reminderTextInput = (EditText) findViewById(R.id.fg_reminder_et_reminder_title);
+
+        FloatingActionButton saveReminderButton = (FloatingActionButton) findViewById(R.id.fg_reminder_fab_save_reminder);
+        saveReminderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Finish the registration screen and return to the Login activity
-                finish();
-            }
-        });
-    }
 
-    public void signup() {
-        Log.d(TAG, "Signup");
+                final Reminder reminder = Reminder.builder().setDueDate(DateEdit.getText().toString()
+                    ).setGroup(categoryInput.getSelectedItem().toString()).setRecurringType(
+                            recurringInput.getSelectedItem().toString()).setStatus(
+                                    "Scheduled").setTitle(reminderTextInput.getText().toString()).build();
 
-        if (!validate()) {
-            onSignupFailed();
-            return;
-        }
-
-        _signupButton.setEnabled(false);
-
-        final ProgressDialog progressDialog = new ProgressDialog(AddReminderActivity.this,
-                R.style.appTheme_dark);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Creating Account...");
-        progressDialog.show();
-
-        String name = _nameText.getText().toString();
-        String email = _emailText.getText().toString();
-        String password = _passwordText.getText().toString();
-
-        // TODO: Implement your own signup logic here.
-
-        new android.os.Handler().postDelayed(
-                new Runnable() {
+                new DatabaseAsync().execute(reminder);
+                /*final AppDatabase appDatabase=AppDatabase.getDatabase(getApplicationContext());*/
+                // run the sentence in a new thread
+/*                new Thread(new Runnable() {
+                    @Override
                     public void run() {
-                        // On complete call either onSignupSuccess or onSignupFailed
-                        // depending on success
-                        onSignupSuccess();
-                        // onSignupFailed();
-                        progressDialog.dismiss();
+                        appDatabase.reminderModel().addReminder(reminder);
+                        Reminder reminder = appDatabase.reminderModel().getReminder(123);
+                        List<Reminder> reminders = appDatabase.reminderModel().getAllReminders();
+                        String myvar = reminder.getTitle();
                     }
-                }, 3000);
+                }).start();*/
+
+               /* new AsyncTask<Reminder,Void,Void>(){
+                    @Override
+                    protected Void doInBackground(Reminder... params) {
+                        appDatabase.reminderModel().addReminder(reminder);
+                        return null;
+                    }
+                }.execute();*/
+
+
+
+            }
+        });
+    }
+
+    private class DatabaseAsync extends AsyncTask<Reminder, Void, Void>{
+
+        @Override
+        protected Void doInBackground(Reminder... reminder) {
+            final AppDatabase appDatabase=AppDatabase.getDatabase(getApplicationContext());
+            appDatabase.reminderModel().addReminder(reminder[0]);
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            //Perform pre-adding operation here.
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            //To after addition operation here.
+        }
     }
 
 
-    public void onSignupSuccess() {
-        _signupButton.setEnabled(true);
-        setResult(RESULT_OK, null);
-        finish();
+
+    @Override
+    protected void onDestroy() {
+        AppDatabase.destroyInstance();
+        super.onDestroy();
     }
 
-    public void onSignupFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
-
-        _signupButton.setEnabled(true);
+    private void initToolbar() {
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle(getString(R.string.app_name));
+        mToolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
     }
 
-    public boolean validate() {
-        boolean valid = true;
+    public void showTruitonDatePickerDialog(View v) {
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(getSupportFragmentManager(), "datePicker");
+    }
 
-        String name = _nameText.getText().toString();
-        String email = _emailText.getText().toString();
-        String password = _passwordText.getText().toString();
+    public static class DatePickerFragment extends DialogFragment implements
+            DatePickerDialog.OnDateSetListener {
 
-        if (name.isEmpty() || name.length() < 3) {
-            _nameText.setError("at least 3 characters");
-            valid = false;
-        } else {
-            _nameText.setError(null);
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current date as the default date in the picker
+            final Calendar c = Calendar.getInstance();
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+
+            // Create a new instance of DatePickerDialog and return it
+            return new DatePickerDialog(getActivity(), this, year, month, day);
         }
 
-        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _emailText.setError("enter a valid email address");
-            valid = false;
-        } else {
-            _emailText.setError(null);
+        public void onDateSet(DatePicker view, int year, int month, int day) {
+            // Do something with the date chosen by the user
+            DateEdit.setText(day + "/" + (month + 1) + "/" + year);
+        }
+    }
+
+    public void showTruitonTimePickerDialog(View v) {
+        DialogFragment newFragment = new TimePickerFragment();
+        newFragment.show(getSupportFragmentManager(), "timePicker");
+    }
+
+    public static class TimePickerFragment extends DialogFragment implements
+            TimePickerDialog.OnTimeSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current time as the default values for the picker
+            final Calendar c = Calendar.getInstance();
+            int hour = c.get(Calendar.HOUR_OF_DAY);
+            int minute = c.get(Calendar.MINUTE);
+
+            // Create a new instance of TimePickerDialog and return it
+            return new TimePickerDialog(getActivity(), this, hour, minute,
+                    DateFormat.is24HourFormat(getActivity()));
         }
 
-        if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
-            _passwordText.setError("between 4 and 10 alphanumeric characters");
-            valid = false;
-        } else {
-            _passwordText.setError(null);
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            // Do something with the time chosen by the user
+            DateEdit.setText(DateEdit.getText() + " -" + hourOfDay + ":" + minute);
         }
-
-        return valid;
     }
 }

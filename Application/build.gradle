@@ -12,6 +12,9 @@ apply plugin: 'com.android.application'
 
 repositories {
     jcenter()
+    maven {
+        url "https://maven.google.com"
+    }
 }
 
 dependencies {
@@ -24,6 +27,10 @@ dependencies {
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:recyclerview-v7:25.3.1'
+    compile 'android.arch.lifecycle:extensions:1.0.0-alpha1';
+    compile 'android.arch.persistence.room:runtime:1.0.0-alpha1';
+    annotationProcessor 'android.arch.lifecycle:compiler:1.0.0-alpha1';
+    annotationProcessor 'android.arch.persistence.room:compiler:1.0.0-alpha1';
 }
 
 // The sample build uses multiple directories to

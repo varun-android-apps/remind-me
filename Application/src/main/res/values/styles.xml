@@ -27,4 +27,7 @@
         <item name="colorAccent">@color/color_accent_pink</item>
     </style>
 
+    <item name="visible" type="id"/>
+    <item name="masked" type="id"/>
+
 </resources>

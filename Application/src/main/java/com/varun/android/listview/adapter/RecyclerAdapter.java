@@ -13,15 +13,21 @@ import android.view.ViewGroup;
 
 import com.varun.android.listview.R;
 import com.varun.android.listview.holders.RecyclerItemViewHolder;
+import com.varun.android.listview.model.Reminder;
 
 import java.util.List;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<String> mItemList;
+    private List<Reminder> reminderList;
 
-    public RecyclerAdapter(List<String> itemList) {
-        mItemList = itemList;
+//    public RecyclerAdapter(List<String> itemList) {
+//        mItemList = itemList;
+//    }
+
+    public RecyclerAdapter(List<Reminder> reminderList) {
+        this.reminderList = reminderList;
     }
 
     @Override
@@ -34,13 +40,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         RecyclerItemViewHolder holder = (RecyclerItemViewHolder) viewHolder;
-        String itemText = mItemList.get(position);
-        holder.setItemText(itemText);
+        Reminder reminder = reminderList.get(position);
+        holder.setItemDisplay(reminder);
+
     }
 
     @Override
     public int getItemCount() {
-        return mItemList == null ? 0 : mItemList.size();
+        return reminderList == null ? 0 : reminderList.size();
     }
 
 }
